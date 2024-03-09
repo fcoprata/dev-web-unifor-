@@ -49,7 +49,8 @@ async def get_products():
     rows = cur.fetchall()
     cur.close()
     conn.close()
-    products = [{'id': row[0], 'name': row[1], 'describe': row[2], 'price': row[3]} for row in rows]
+    products = [{'id': row[0], 'name': row[1],
+                 'describe': row[2], 'price': row[3]} for row in rows]
     return products
 
 
@@ -79,4 +80,4 @@ async def delete_product(product_id: int):
 
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=9000)
