@@ -21,8 +21,11 @@ class Product(BaseModel):
 
 
 # Função para conectar ao banco de dados
+DB_HOST = "meu-postgresdb"  # Nome do contêiner do PostgreSQL
+DB_PORT = "5432"  # Porta padrão do PostgreSQL
 def connect_db():
     conn = psycopg2.connect(host=DB_HOST,
+                            port=DB_PORT,
                             dbname=DB_NAME,
                             user=DB_USER,
                             password=DB_PASSWORD)
