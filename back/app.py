@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import psycopg2
+from starlette.responses import RedirectResponse
 
 app = FastAPI()
 
@@ -26,6 +27,13 @@ def connect_db():
                             user=DB_USER,
                             password=DB_PASSWORD)
     return conn
+
+
+# Rota para redirecionar para a documentação do Swagger
+@app.get("/", include_in_schema=False)
+async def redirect_to_docs():
+    return RedirectResponse(url="/docs")
+
 
 # Rota para criar um novo produto
 @app.post('/products/')
