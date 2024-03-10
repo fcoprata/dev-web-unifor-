@@ -23,6 +23,8 @@ class Product(BaseModel):
 # Função para conectar ao banco de dados
 DB_HOST = "meu-postgresdb"  # Nome do contêiner do PostgreSQL
 DB_PORT = "5432"  # Porta padrão do PostgreSQL
+
+
 def connect_db():
     conn = psycopg2.connect(host=DB_HOST,
                             port=DB_PORT,
@@ -43,7 +45,8 @@ async def redirect_to_docs():
 async def create_product(product: Product):
     conn = connect_db()
     cur = conn.cursor()
-    cur.execute("INSERT INTO products (name, describe, price) VALUES (%s, %s, %s)",
+    cur.execute("""INSERT INTO products (name, describe, price)
+                VALUES (%s, %s, %s)""",
                 (product.name, product.describe, product.price))
     conn.commit()
     cur.close()
@@ -70,7 +73,10 @@ async def get_products():
 async def update_product(product_id: int, product: Product):
     conn = connect_db()
     cur = conn.cursor()
-    cur.execute("UPDATE products SET name = %s, describe = %s, price = %s WHERE id = %s",
+    cur.execute("""UPDATE products SET name = %s,
+                describe = %s,
+                price = %s
+                WHERE id = %s""",
                 (product.name, product.describe, product.price, product_id))
     conn.commit()
     cur.close()
