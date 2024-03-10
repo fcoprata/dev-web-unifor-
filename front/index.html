@@ -67,7 +67,7 @@
         <div class="form-group">
             <input type="number" id="price" placeholder="Preço">
         </div>
-        <button onclick="createUser()">Adicionar</button>
+        <button onclick="createProduct()">Adicionar</button>
         <br><br>
         <table>
             <thead>
@@ -85,46 +85,46 @@
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        // Função para carregar os usuários
+        // Função para carregar os produtos
         function loadProducts() {
-            axios.get('http://0.0.0.0:9000')
+            axios.get('http://localhost:9000')
             .then(function (response) {
                 // Limpar a tabela
-                document.getElementById('productTable').innerHTML = '';
+                document.getElementById('userTable').innerHTML = '';
 
-                // Adicionar usuários à tabela
+                // Adicionar produtos à tabela
                 response.data.forEach(function (product) {
                     var row = '<tr>';
                     row += '<td>' + product.name + '</td>';
                     row += '<td>' + product.describe + '</td>';
                     row += '<td>' + product.price + '</td>';
-                    row += '<td><button onclick="editproduct(' + product.id + ')">Editar</button> <button onclick="deleteproduct(' + product.id + ')">Excluir</button></td>';
+                    row += '<td><button onclick="editProduct(' + product.id + ')">Editar</button> <button onclick="deleteProduct(' + product.id + ')">Excluir</button></td>';
                     row += '</tr>';
-                    document.getElementById('productTable').innerHTML += row;
+                    document.getElementById('userTable').innerHTML += row;
                 });
             })
             .catch(function (error) {
-                console.error('Erro ao carregar usuários: ' + error);
+                console.error('Erro ao carregar produtos: ' + error);
             });
         }
 
-        // Função para adicionar usuário
+        // Função para adicionar produto
         function createProduct() {
             var name = document.getElementById('name').value;
             var describe = document.getElementById('describe').value;
             var price = document.getElementById('price').value;
 
-            axios.post('http://0.0.0.0:9000', {
+            axios.post('http://localhost:9000', {
                 name: name,
                 describe: describe,
                 price: price
             })
             .then(function (response) {
-                console.log('produtos adicionado com sucesso: ', response.data);
-                loadUsers(); // Recarregar produtos após adicionar
+                console.log('Produto adicionado com sucesso: ', response.data);
+                loadProducts(); // Recarregar produtos após adicionar
             })
             .catch(function (error) {
-                console.error('Erro ao adicionar produtos: ' + error);
+                console.error('Erro ao adicionar produto: ' + error);
             });
         }
 
