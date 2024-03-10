@@ -87,7 +87,7 @@
     <script>
         // Função para carregar os produtos
         function loadProducts() {
-            axios.get('http://localhost:9000')
+            axios.get('http://localhost:9000/api') // Alteração na URL para acessar a API
             .then(function (response) {
                 // Limpar a tabela
                 document.getElementById('userTable').innerHTML = '';
@@ -114,7 +114,7 @@
             var describe = document.getElementById('describe').value;
             var price = document.getElementById('price').value;
 
-            axios.post('http://localhost:9000', {
+            axios.post('http://localhost:9000/api', { // Alteração na URL para acessar a API
                 name: name,
                 describe: describe,
                 price: price

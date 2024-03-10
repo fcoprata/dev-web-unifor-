@@ -35,9 +35,9 @@ def connect_db():
 
 
 # Rota para redirecionar para a documentação do Swagger
-@app.get("/", include_in_schema=False)
-async def redirect_to_docs():
-    return RedirectResponse(url="/docs")
+# @app.get("/", include_in_schema=False)
+# async def redirect_to_docs():
+#     return RedirectResponse(url="/docs")
 
 
 # Rota para criar um novo produto
