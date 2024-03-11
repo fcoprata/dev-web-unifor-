@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import psycopg2
-from starlette.responses import RedirectResponse
 
 app = FastAPI()
 
