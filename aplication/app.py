@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import psycopg2
 
@@ -16,7 +17,7 @@ class Product(BaseModel):
     id: int
     name: str
     describe: str
-    price: float
+    price: str
 
 
 # Função para conectar ao banco de dados
@@ -33,10 +34,18 @@ def connect_db():
     return conn
 
 
-# Rota para redirecionar para a documentação do Swagger
-# @app.get("/", include_in_schema=False)
-# async def redirect_to_docs():
-#     return RedirectResponse(url="/docs")
+# Defina as origens permitidas como ["*"] para permitir todas as origens
+origins = ["*"]
+
+
+# Adicionando middleware CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["*"],
+)
 
 
 # Rota para criar um novo produto

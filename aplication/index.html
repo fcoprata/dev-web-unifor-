@@ -23,7 +23,7 @@
         .form-group {
             margin-bottom: 20px;
         }
-        input[type="text"], input[type="number"], input[type="text"] {
+        input[type="text"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -65,7 +65,7 @@
             <input type="text" id="describe" placeholder="Descritivo">
         </div>
         <div class="form-group">
-            <input type="number" id="price" placeholder="Preço">
+            <input type="text" id="price" placeholder="Preço">
         </div>
         <button onclick="createProduct()">Adicionar</button>
         <br><br>
@@ -77,7 +77,7 @@
                     <th>Preço</th>
                 </tr>
             </thead>
-            <tbody id="userTable">
+            <tbody id="productTable">
                 <!-- Dados da tabela serão inseridos aqui -->
             </tbody>
         </table>
@@ -87,20 +87,17 @@
     <script>
         // Função para carregar os produtos
         function loadProducts() {
-            axios.get('http://localhost:9000/api') // Alteração na URL para acessar a API
+            axios.get('http://localhost:9000/products/')
             .then(function (response) {
-                // Limpar a tabela
-                document.getElementById('userTable').innerHTML = '';
+                document.getElementById('productTable').innerHTML = '';
 
-                // Adicionar produtos à tabela
                 response.data.forEach(function (product) {
                     var row = '<tr>';
                     row += '<td>' + product.name + '</td>';
                     row += '<td>' + product.describe + '</td>';
                     row += '<td>' + product.price + '</td>';
-                    row += '<td><button onclick="editProduct(' + product.id + ')">Editar</button> <button onclick="deleteProduct(' + product.id + ')">Excluir</button></td>';
                     row += '</tr>';
-                    document.getElementById('userTable').innerHTML += row;
+                    document.getElementById('productTable').innerHTML += row;
                 });
             })
             .catch(function (error) {
@@ -114,33 +111,20 @@
             var describe = document.getElementById('describe').value;
             var price = document.getElementById('price').value;
 
-            axios.post('http://localhost:9000/api', { // Alteração na URL para acessar a API
+            axios.post('http://localhost:9000/products/', {
                 name: name,
                 describe: describe,
                 price: price
             })
             .then(function (response) {
                 console.log('Produto adicionado com sucesso: ', response.data);
-                loadProducts(); // Recarregar produtos após adicionar
+                loadProducts();
             })
             .catch(function (error) {
                 console.error('Erro ao adicionar produto: ' + error);
             });
         }
 
-        // Função para editar produto
-        function editProduct(id) {
-            // Implemente a edição do produto conforme sua lógica
-            console.log('Editar produto com ID: ' + id);
-        }
-
-        // Função para excluir produto
-        function deleteProduct(id) {
-            // Implemente a exclusão do produto conforme sua lógica
-            console.log('Excluir produto com ID: ' + id);
-        }
-
-        // Carregar produtos quando a página carregar
         window.onload = function () {
             loadProducts();
         };
