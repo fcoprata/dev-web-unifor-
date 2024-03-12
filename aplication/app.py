@@ -6,6 +6,7 @@ import psycopg2
 app = FastAPI()
 
 # Configurações do banco de dados
+# Deixar ativo quando for executar localmente
 DB_HOST = 'localhost'
 DB_NAME = 'dev-web'
 DB_USER = 'admin'
@@ -14,14 +15,14 @@ DB_PASSWORD = '12341234'
 
 # Modelo Pydantic para representar um produto
 class Product(BaseModel):
-    id: int
     name: str
     describe: str
     price: str
 
 
 # Função para conectar ao banco de dados
-DB_HOST = "meu-postgresdb"  # Nome do contêiner do PostgreSQL
+# Ativar para dockerizar
+# DB_HOST = "meu-postgresdb"  # Nome do contêiner do PostgreSQL
 DB_PORT = "5432"  # Porta padrão do PostgreSQL
 
 
@@ -34,14 +35,10 @@ def connect_db():
     return conn
 
 
-# Defina as origens permitidas como ["*"] para permitir todas as origens
-origins = ["*"]
-
-
 # Adicionando middleware CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],

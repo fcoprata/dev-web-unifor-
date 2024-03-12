@@ -109,21 +109,30 @@
         function createProduct() {
             var name = document.getElementById('name').value;
             var describe = document.getElementById('describe').value;
-            var price = document.getElementById('price').value;
+            var price = document.getElementById('price').value; // Parse price to float
 
-            axios.post('http://localhost:9000/products/', {
-                name: name,
-                describe: describe,
-                price: price
-            })
-            .then(function (response) {
-                console.log('Produto adicionado com sucesso: ', response.data);
-                loadProducts();
-            })
-            .catch(function (error) {
-                console.error('Erro ao adicionar produto: ' + error);
-            });
+            // Log data before sending the request
+            console.log("Sending data:", { name, describe, price });
+
+            if (name && describe && price) {
+                axios.post('http://localhost:9000/products/', {
+                    name: name,
+                    describe: describe,
+                    price: price
+                })
+                .then(function (response) {
+                    console.log('Produto adicionado com sucesso: ', response.data);
+                    loadProducts();
+                })
+                .catch(function (error) {
+                    console.error('Erro ao adicionar produto:', error.response.data); // Log the error response
+                });
+            } else {
+                console.error('Por favor, preencha todos os campos.');
+            }
         }
+
+
 
         window.onload = function () {
             loadProducts();
