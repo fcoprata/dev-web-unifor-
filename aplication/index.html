@@ -13,7 +13,7 @@
             background-color: #f4f4f4;
         }
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 20px auto;
             padding: 20px;
             background-color: #fff;
@@ -24,7 +24,7 @@
             margin-bottom: 20px;
         }
         input[type="text"] {
-            width: 100%;
+            width: calc(100% - 40px);
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -72,9 +72,11 @@
         <table>
             <thead>
                 <tr>
+                    <th>ID</th> <!-- Nova coluna para o ID -->
                     <th>Nome</th>
                     <th>Descritivo</th>
                     <th>Preço</th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody id="productTable">
@@ -93,9 +95,12 @@
 
                 response.data.forEach(function (product) {
                     var row = '<tr>';
+                    row += '<td>' + product.id + '</td>';
                     row += '<td>' + product.name + '</td>';
                     row += '<td>' + product.describe + '</td>';
                     row += '<td>' + product.price + '</td>';
+                    row += '<td><button onclick="deleteProduct(\'' + product.id + '\')">Excluir</button>';
+                    row += '<button onclick="editProduct(\'' + product.id + '\')">Editar</button></td>';
                     row += '</tr>';
                     document.getElementById('productTable').innerHTML += row;
                 });
@@ -109,10 +114,7 @@
         function createProduct() {
             var name = document.getElementById('name').value;
             var describe = document.getElementById('describe').value;
-            var price = document.getElementById('price').value; // Parse price to float
-
-            // Log data before sending the request
-            console.log("Sending data:", { name, describe, price });
+            var price = document.getElementById('price').value;
 
             if (name && describe && price) {
                 axios.post('http://localhost:9000/products/', {
@@ -125,14 +127,50 @@
                     loadProducts();
                 })
                 .catch(function (error) {
-                    console.error('Erro ao adicionar produto:', error.response.data); // Log the error response
+                    console.error('Erro ao adicionar produto:', error.response.data);
                 });
             } else {
                 console.error('Por favor, preencha todos os campos.');
             }
         }
 
+        // Função para excluir produto
+        function deleteProduct(id) {
+            axios.delete('http://localhost:9000/products/' + id)
+            .then(function (response) {
+                console.log('Produto excluído com sucesso');
+                loadProducts();
+            })
+            .catch(function (error) {
+                console.error('Erro ao excluir produto:', error);
+            });
+        }
 
+        // Função para editar produto
+        function editProduct() {
+            var id = document.getElementById('editProductId').value;
+            var name = document.getElementById('editName').value;
+            var describe = document.getElementById('editDescribe').value;
+            var price = document.getElementById('editPrice').value;
+
+            if (id && name && describe && price) {
+                axios.put('http://localhost:9000/products/' + id, {
+                    name: name,
+                    describe: describe,
+                    price: price
+                })
+                .then(function (response) {
+                    console.log('Produto atualizado com sucesso');
+                    closeModal();
+                    loadProducts(); // Recarregar a lista de produtos após a atualização
+                })
+                .catch(function (error) {
+                    console.error('Erro ao atualizar produto:', error);
+                });
+            } else {
+                console.error('Por favor, preencha todos os campos.');
+            }
+        }
 
         window.onload = function () {
             loadProducts();
