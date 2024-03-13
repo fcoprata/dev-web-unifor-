@@ -73,6 +73,27 @@ async def get_products():
     return products
 
 
+# Rota para obter um produto por ID
+@app.get('/products/{product_id}')
+async def get_product_by_id(product_id: int):
+    conn = connect_db()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM products WHERE id = %s", (product_id,))
+    row = cur.fetchone()
+    cur.close()
+    conn.close()
+
+    if row:
+        product = {'id': row[0],
+                   'name': row[1],
+                   'describe': row[2],
+                   'price': row[3]}
+        return product
+    else:
+        # Retorna 404 se o produto não for encontrado
+        return {"message": "Product not found"}, 404
+
+
 # Rota para atualizar um produto
 @app.put('/products/{product_id}')
 async def update_product(product_id: int, product: Product):
@@ -94,7 +115,7 @@ async def update_product(product_id: int, product: Product):
 async def delete_product(product_id: int):
     conn = connect_db()
     cur = conn.cursor()
-    cur.execute("DELETE FROM products WHERE id = %s", (product_id,))
+    cur.execute("DELETE FROM products WHERE id = %s", (product_id))
     conn.commit()
     cur.close()
     conn.close()
