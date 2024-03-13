@@ -85,6 +85,23 @@
         </table>
     </div>
 
+    <!-- Modal para edição de produto -->
+    <div id="editModal" style="display: none;">
+        <h2>Editar Produto</h2>
+        <div class="form-group">
+            <input type="hidden" id="editProductId">
+            <input type="text" id="editName" placeholder="Nome">
+        </div>
+        <div class="form-group">
+            <input type="text" id="editDescribe" placeholder="Descritivo">
+        </div>
+        <div class="form-group">
+            <input type="text" id="editPrice" placeholder="Preço">
+        </div>
+        <button onclick="editProduct()">Salvar</button>
+        <button onclick="closeModal()">Cancelar</button>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         // Função para carregar os produtos
@@ -100,7 +117,7 @@
                     row += '<td>' + product.describe + '</td>';
                     row += '<td>' + product.price + '</td>';
                     row += '<td><button onclick="deleteProduct(\'' + product.id + '\')">Excluir</button>';
-                    row += '<button onclick="editProduct(\'' + product.id + '\')">Editar</button></td>';
+                    row += '<button onclick="openEditModal(\'' + product.id + '\', \'' + product.name + '\', \'' + product.describe + '\', \'' + product.price + '\')">Editar</button></td>';
                     row += '</tr>';
                     document.getElementById('productTable').innerHTML += row;
                 });
@@ -144,6 +161,20 @@
             .catch(function (error) {
                 console.error('Erro ao excluir produto:', error);
             });
+        }
+
+        // Função para abrir o modal de edição de produto
+        function openEditModal(id, name, describe, price) {
+            document.getElementById('editProductId').value = id;
+            document.getElementById('editName').value = name;
+            document.getElementById('editDescribe').value = describe;
+            document.getElementById('editPrice').value = price;
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        // Função para fechar o modal de edição de produto
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
         }
 
         // Função para editar produto
